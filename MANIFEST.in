@@ -1,0 +1,6 @@
+include README.md
+include requirements.txt
+include LICENSE
+include demo/*.tif
+include bf_template_match/*.py
+include bf_template_match_run.py
