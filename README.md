@@ -20,13 +20,17 @@ cd path/to/dir
 ```
 4. Install additional requirements
 ```
+conda install -c conda-forge tifffile
 pip install -r requirements.txt
 ```
+Note for windows users: If you experience errors installing the tiffffile library, 
+download and install a pre-built .whl file from [Christoph Gohlke's repository](https://www.lfd.uci.edu/~gohlke/pythonlibs/#tifffile) 
+
 5. Install the bf_template_match package
 ```
 python setup.py install
 ```
-6. Quick test 
+6. Quick test
 ```
 bf_template_match --help
 ```
@@ -38,7 +42,7 @@ If all went fine, the command line help is displayed (see below)
 1. Open (Anaconda) prompt
 ```
 cd path/to/dir
-bf_template_match -a 1-360:2 -ef 7.9-8.1:0.1 demo\img_post.tif demo\img_pre.tif
+bf_template_match -a 1-360:2 -ef 7.9-8.1:0.1 demo/img_post.tif demo/img_pre.tif
 ```
 2. This will search for the optimal alignment of `img_post.tif` having a pixel size of `1 um` and
 `img_pre.tif` having a pixel size of `1 um` (default). The applied post-expansion image smoothing 

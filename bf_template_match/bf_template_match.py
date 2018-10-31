@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 
 __author__ = "christoph.sommer@ist.ac.at"
 __licence__ = "GPLv3"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 description = \
 """
