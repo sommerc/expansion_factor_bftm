@@ -53,11 +53,11 @@ has sigma 1 (default). Search for three expansion factors of `7.9, 8, 8.1` and
 
 ```
 --------------------------------------------------------------------
---- bf_template_match 0.1.0 ----------------------------------------
+--- bf_template_match 0.2.0 ----------------------------------------
 --------------------------------------------------------------------
  - Arguments:
-  -- img_post                   demo\img_post.tif
-  -- img_pre                    demo\img_pre.tif
+  -- img_post                   demo/img_post.tif
+  -- img_pre                    demo/img_pre.tif
   -- ef                         7.9-8.1:0.1
   -- a                          1-360:2
   -- ds                         1
@@ -66,25 +66,26 @@ has sigma 1 (default). Search for three expansion factors of `7.9, 8, 8.1` and
   -- pre_um                     1
   -- n_cpus                     12
 --------------------------------------------------------------------
- - Loading pre expansion image
+ - Loading pre-expansion image
  - Loading post-expansion image
  - Using initial post-expansion down scaling 0.12658227848101264
- - Downsample pre expansion image with 1.000
- - Downsample and smooth post expansion image with sigma 1.000
- = BF-template match on 12 CPUS: 100%|███████████████████████████████████████████████| 540/540 [09:45<00:00,  1.08s/it]
- - took 585.6107351779938 sec.
- - best match with correlation with corr 0.560 and final expansion-factor 8.000
+ - Downsample pre-expansion image with 1.000
+ - Downsample and smooth post-expansion image with sigma 1.000
+ = BF-template match on 12 CPUS: 100%|███████████████████████████████████████████████| 540/540 [10:56<00:00,  1.22s/it]
+ - took 656.4738886356354 sec.
+ - best match with correlation with corr 0.561 and final expansion-factor 8.000
 
-0.5600380185603561 (1375, 24) (341, 341) (0.9875000000000002, 155.0)
+ - Found post-expansion image at upper-left corner = (1375, 24) with height, width = (341, 341) and rotation angle 155.0
 
- - Exporting image to 'demo\best_match_c0.560_ef8.000_a155.0_low-res.tif'
-  -- Use working scale...
- - Exporting image to 'demo\best_match_c0.560_ef8.000_a155.0_high-post-res.tif'
-  -- Upscaling img_pre to full img_post_res
+ - Exporting image to 'demo\best_match_c0.561_ef8.000_a155.0_low-res.tif'
+  -- Use working scale from pre-expansion
+ - Exporting image to 'demo\best_match_c0.561_ef8.000_a155.0_high-post-res.tif'
+  -- Upscaling pre-expansion image to post-expansion resolution
 ```
 
-Inspect the output image `best_match_c0.560_ef8.000_a155.0_high-post-res.tif` in the demo folder 
-
+Inspect the output image `best_match_c0.560_ef8.000_a155.0_high-post-res.tif` in the demo folder. The tiffile contains the pre-expansion image (first channel) and the optimally 
+transformed post-expansion image. The pixel-size is the pixel-size of the post-expansion 
+image.
 
 ## Usage: more command line arguments
 ---
@@ -94,7 +95,7 @@ usage: bf_template_match [-h] -ef EF [-a A] [-ds DS]
                          [-pre_um PRE_UM] [-n_cpus N_CPUS]
                          img_post img_pre
 
-Brute force image template matching for expansion  microscopy
+Brute force image template matching for expansion microscopy
 --------------------------------------------------------------------------------
 
 Find the similarity transform (rotation, scaling and translation) of a post-
@@ -139,4 +140,22 @@ optional arguments:
   -pre_um PRE_UM        The pixel-size in micro-meter of the pre-expansion image
   -n_cpus N_CPUS        Number of CPUS used for parallel execution (default: number of available CPUS)
 ```
+
+## Distortion analysis
+---
+For the local distortion analysis we provide an IPython notebook 'distortion_analysis.ipynb' located in the demo folder.
+
+Start Jupyter-Notebook from your Anaconda installation and open the 'distortion_analysis.ipynb'.
+
+This notebook uses the result of 'bf_template_match' to quantify the extent of local distortions.
+
+The processing steps are:
+1. Import required Python modules
+2. Define helper functions 
+3. Specify input parameters
+4. Compute local distortion field (from pre- to post-expansion image)
+5. Calculates the magnitude and angular histograms of the distortion field
+
+Each code block can be executed by "SHIFT+Enter".
+
 
