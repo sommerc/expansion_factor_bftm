@@ -277,6 +277,9 @@ def main():
     print(" - Using initial post-expansion down scaling", img_post_ds)
 
     def get_s_from_ef(ef):
+        """
+        Computes the scaling from provided expansion factors incorporating the actual pixel-sizes
+        """
         return (img_post_reso_um / img_pre_reso_um) * (img_pre_ds / img_post_ds) / ef
     
     s_range = [get_s_from_ef(ef) for ef in args.ef]
