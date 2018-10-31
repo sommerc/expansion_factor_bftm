@@ -81,6 +81,9 @@ n_cpus_description = "Number of CPUS used for parallel execution (default: numbe
 var_dict = {}
 
 def init_worker(img_pre, img_pre_shape, img_post, img_post_shape, srange, arange):
+    """
+    Function to initialize the workers, passing the sizes of the input arrays
+    """
     var_dict['IMG_PRE'] = img_pre
     var_dict['IMG_PRE_SHAPE'] = img_pre_shape
 
@@ -88,6 +91,9 @@ def init_worker(img_pre, img_pre_shape, img_post, img_post_shape, srange, arange
     var_dict['IMG_POST_SHAPE'] = img_post_shape
 
 def transform_scale_rot(img, s, a):
+    """
+    Function to scale and rotate the array 'img' by scale 's' and angle 'a'
+    """
     if s != 1:
         img_s = transform.rescale(img, s, preserve_range=True)
     else:
@@ -97,6 +103,10 @@ def transform_scale_rot(img, s, a):
     return img_s_a
 
 def worker_func(arg):
+    """
+    Main function for processing. Inputs are scale 's' and angle 'a'. The post-expansion image
+    is transformed and the best match agains the pre-expansion image is computed and returned.
+    """
     s, a = arg
     img_pre  = numpy.frombuffer(var_dict['IMG_PRE'],  dtype=numpy.uint8).reshape(var_dict['IMG_PRE_SHAPE'])
     img_post = numpy.frombuffer(var_dict['IMG_POST'], dtype=numpy.uint8).reshape(var_dict['IMG_POST_SHAPE'])
@@ -112,11 +122,17 @@ def worker_func(arg):
     return best_correlation, (y0, x0), (h, w), (s, a)
 
 def load_pre_expansion(pre_fn):
+    """
+    Helper function to read the pre-expansion image
+    """
     print(" - Loading pre-expansion image")
     return tifffile.imread(pre_fn)
      
 
 def prepare_pre_expansion(img_pre_expansion, down_sample_factor):
+    """
+    Helper function to normalize the image intensities and scale of the pre-expansion image
+    """
     print(" - Downsample pre-expansion image with {:4.3f}".format(down_sample_factor))
     pre_overview_xd = transform.rescale(img_pre_expansion, down_sample_factor, preserve_range=True)
 
@@ -124,10 +140,17 @@ def prepare_pre_expansion(img_pre_expansion, down_sample_factor):
     return pre_xd
 
 def load_post_expansion(post_fn):
+    """
+    Helper function to read the post-expansion image
+    """
     print(" - Loading post-expansion image")
     return tifffile.imread(post_fn)
 
 def prepare_post_expansion(img_post_expansion, down_sample_factor, smooth_sigma=1):
+    """
+    Helper function to normalize the image intensities and scale of the post-expansion image.
+    Additionally, the post expansion image is slightly smoothed by an Gaussian filter
+    """
     print(" - Downsample and smooth post-expansion image with sigma {:4.3f}".format(smooth_sigma))
     post_16xd = transform.rescale(img_post_expansion, down_sample_factor, preserve_range=True)
     post_16xd_smooth = filters.gaussian(post_16xd, smooth_sigma, preserve_range=True)
@@ -136,6 +159,9 @@ def prepare_post_expansion(img_post_expansion, down_sample_factor, smooth_sigma=
 
 
 def export_matching_images(img_pre, img_post, ul, hw, sa, pixel_size, out_fn):
+    """
+    Helper function for exporting results.
+    """
     print(" - Exporting image to '{}'".format(out_fn))
     (y0, x0) = ul
     (h, w) = hw
@@ -161,6 +187,9 @@ def export_matching_images(img_pre, img_post, ul, hw, sa, pixel_size, out_fn):
                                                                                  'Composite mode': 'composite'})
 
 def get_args():
+    """
+    Helper function for the argument parser.
+    """
     parser = argparse.ArgumentParser(
         description=description,
         # formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -191,6 +220,9 @@ def get_args():
     return args
 
 def match_str_range(str_range):
+    """
+    Helper function to parse specified scale and angle ranges
+    """
     str_range = str_range.strip()
     match = re.match("(?P<start>{fl})-(?P<stop>{fl}):(?P<step>{fl})".format(fl=r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?'), str_range)
     assert match is not None, "Range '{}' incorrect".format(str_range)
@@ -203,6 +235,9 @@ def match_str_range(str_range):
 
 
 def check_args(args):
+    """
+    Helper function for basic sanity checks of input parameters
+    """
     assert os.path.exists(args.img_post), "specified post-expansion image does not exist '{}'".format(args.img_post)
     assert os.path.exists(args.img_pre),  "specified pre-expansion image does not exist '{}'".format(args.img_pre)
     assert args.post_smooth > 0, "post-expansion smoothing sigma has to be greater than 0"
