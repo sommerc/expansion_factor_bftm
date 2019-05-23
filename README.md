@@ -7,6 +7,8 @@ using normalized cross-correlation. A search range for the linear expansion-
 factor (scaling) and angles (rotation) is searched in parallel to compute the
 best matching transformation and outputs the best matching image-regions as tif.
 
+["A practical guide to optimization in X10 expansion microscopy" S. Truckenbrodt et al.](https://doi.org/10.1038/s41596-018-0117-3)
+
 ## Installation
 ---
 
