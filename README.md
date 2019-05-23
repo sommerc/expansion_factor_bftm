@@ -20,7 +20,7 @@ cd path/to/dir
 ```
 4. Install additional requirements
 ```
-conda install -c conda-forge tifffile opencv
+conda install -c conda-forge tifffile
 pip install -r requirements.txt
 ```
 Note for windows users: If you experience errors installing the tiffffile library, 
